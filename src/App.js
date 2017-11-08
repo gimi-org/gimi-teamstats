@@ -1,51 +1,91 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import logo from './logo.svg';
 import './App.css';
 import fetch from 'node-fetch'
+import keys from './keys.json'
+import { BarChart, Bar, XAxis, YAxis } from 'recharts';
+
+//Auth
+const USER = keys.user
+const TOKEN = keys.secret
+const AUTH = btoa(`${USER}:${TOKEN}`)
+const HEADER = {Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Basic ${AUTH}`}
+const OPTIONS = {method: "GET", headers: HEADER}
+
 const GIT_URL = 'https://api.github.com'
-const CALL = '/stats/code_frequency'
-const LINUX = '/repos/torvalds/linux'
-const REACT = '/repos/facebook/react'
-const REACT_NATIVE = '/repos/facebook/react-native'
-const GIMI = '/repos/gimi-org/gimi-app'
-const COMPANIES = [{name: 'linux', url: LINUX}, {name: 'react', url: REACT}, {name: 'react-native', url: REACT_NATIVE}]
+const CALL = '/stats/participation'
+const COMPANIES = [
+  {name: 'Angular', url: '/repos/angular/angular.js'},
+  {name: 'Linux', url: '/repos/torvalds/linux'},
+  {name: 'React', url: '/repos/facebook/react'},
+  {name: 'React Native', url: '/repos/facebook/react-native'},
+  {name: 'VLC', url: '/repos/videolan/vlc'},
+  {name: 'Bootstrap', url: '/repos/twbs/bootstrap'},
+  {name: 'NodeJS', url: '/repos/nodejs/node'},
+  {name: 'Atom', url: '/repos/atom/atom'},
+  {name: 'VS Code', url: '/repos/Microsoft/vscode'},
+  {name: 'TensorFlow', url: '/repos/tensorflow/tensorflow'},
+  {name: 'Veckopengen', url: '/repos/gimi-org/gimi-app'}
+]
+
 class App extends Component {
-state = {stats: []}
+  state = {stats: []}
   componentWillMount () {
     var data = []
-    const URL = GIT_URL + REACT_NATIVE + CALL
-    const DATA = {}
-    const OPTIONS = {method: "GET", body: JSON.stringify(DATA), headers: {"Content-Type": "application/json", "Authorization": "token OAUTH-TOKEN"}}
-    fetch(GIT_URL + '/rate_limit')
-    .then((res) => res.text())
-    .then((res) => console.log(res))
+
     COMPANIES.map((company) => {
-      fetch(URL, OPTIONS)
-      .then((res) => res.text())
+      let url = this.urlBuilder(company.url)
+      fetch(url, OPTIONS)
+      .then((res) => res.json())
       .then((res) => {
-        data.push({name: company.name, data: res})
+        // Pop commit count from latest week
+        data.push({name: company.name, data: res.all.pop()})
       })
       .then(() => this.setState({stats: data}))
     })
   }
 
+  urlBuilder(company) {
+    return GIT_URL + company + CALL
+  }
+
   render() {
     var {stats} = this.state
-    return <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-          {stats.map((stat, index) => this.renderStat(stat, index))}
+    return (
+      <div style={{flex: 1, marginTop: 20}} className="App">
+        <h1>Commits this week</h1>
+        <p>(Week starts Sunday)</p>
+        {this.renderChart()}
       </div>
+    )
+  }
+
+  renderChart () {
+    var {stats} = this.state
+
+    return (
+      <BarChart width={1200} height={600} data={stats}>
+        <XAxis dataKey="name" tick={{stroke: 'black', padding: 5, strokeWidth: 1, fontSize: 18}} />
+        <YAxis />
+        <Bar type="monotone" dataKey="data" barSize={30} fill="#66ccff"
+          label={{ fill: 'red', fontSize: 20 }} />
+      </BarChart>
+    )
   }
 
   renderStat(stat, index) {
-    return <div key={index}>
-      <span>{stat.name}</span>
-      <span>{stat.data}</span>
-    </div>
+    return (
+      <div key={index}>
+        <span>{stat.name}</span>
+        <br/>
+        <div>
+          <p>Commits this week: {stat.data}</p>
+        </div>
+      </div>
+    )
   }
+
+
 }
 
 export default App;
