@@ -25,7 +25,7 @@ const COMPANIES = [
   {name: 'Atom', url: '/repos/atom/atom'},
   {name: 'VS Code', url: '/repos/Microsoft/vscode'},
   {name: 'TensorFlow', url: '/repos/tensorflow/tensorflow'},
-  {name: 'Veckopengen', url: '/repos/gimi-org/gimi-app'}
+  // {name: 'Veckopengen', url: '/repos/gimi-org/gimi-app'}
 ]
 
 class App extends Component {
@@ -39,6 +39,7 @@ class App extends Component {
       .then((res) => res.json())
       .then((res) => {
         // Pop commit count from latest week
+        console.log(res)
         data.push({name: company.name, data: res.all.pop()})
       })
       .then(() => this.setState({stats: data}))
