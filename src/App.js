@@ -6,8 +6,8 @@ import keys from './keys.json'
 import { BarChart, Bar, XAxis, YAxis } from 'recharts';
 
 //Auth
-const USER = keys.user
-const TOKEN = keys.secret
+const USER = "barvin"
+const TOKEN = "8397285e043d41a9b4b780dfa9630993b2caf2d4"
 const AUTH = btoa(`${USER}:${TOKEN}`)
 const HEADER = {Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Basic ${AUTH}`}
 const OPTIONS = {method: "GET", headers: HEADER}
