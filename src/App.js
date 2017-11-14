@@ -3,10 +3,15 @@ import React, { Component } from 'react'
 import './App.css';
 import fetch from 'node-fetch'
 import { BarChart, Bar, XAxis, YAxis } from 'recharts';
+import keys from './keys.json'
 
 //Auth
-const USER = "barvin"
-const TOKEN = "8397285e043d41a9b4b780dfa9630993b2caf2d4"
+const USER = keys.user
+const TOKEN = keys.token
+
+if(!USER) throw Error('Could not find GITHUB_USER in keys.json') //Goto: <arvin add url here> to obtain your user
+if(!TOKEN) throw Error('Could not find GITHUB_TOKEN in keys.json') //Goto: <arvin add url here> to obtain your token
+
 const AUTH = btoa(`${USER}:${TOKEN}`)
 const HEADER = {Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Basic ${AUTH}`}
 const OPTIONS = {method: "GET", headers: HEADER}
@@ -24,7 +29,7 @@ const COMPANIES = [
   {name: 'Atom', url: '/repos/atom/atom'},
   {name: 'VS Code', url: '/repos/Microsoft/vscode'},
   {name: 'TensorFlow', url: '/repos/tensorflow/tensorflow'},
-  // {name: 'Veckopengen', url: '/repos/gimi-org/gimi-app'}
+  {name: 'Veckopengen', url: '/repos/gimi-org/gimi-app'}
 ]
 
 class App extends Component {
