@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import './App.css';
 import fetch from 'node-fetch'
 import { BarChart, Bar, XAxis, YAxis } from 'recharts';
-import keys from './keys.json'
+import keys from './keys.json' //Goto: <arvin add url here> to obtain your keys
 
 //Auth
 const USER = keys.user

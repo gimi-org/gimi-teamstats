@@ -1,3 +1,4 @@
+if(!process.env.CI) process.exit(0)
 let fs = require('fs')
 let user = process.env.GITHUB_USER
 let token = process.env.GITHUB_TOKEN
