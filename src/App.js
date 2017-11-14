@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import fetch from 'node-fetch'
 import { BarChart, Bar, XAxis, YAxis } from 'recharts';
@@ -32,14 +32,13 @@ class App extends Component {
   componentWillMount () {
     var data = []
 
-    COMPANIES.map((company) => {
+    COMPANIES.forEach((company) => {
       let url = this.urlBuilder(company.url)
       fetch(url, OPTIONS)
       .then((res) => res.json())
       .then((res) => {
         // Pop commit count from latest week
-        console.log(res)
-        data.push({name: company.name, data: res.all.pop()})
+        if(res.all) data.push({name: company.name, data: res.all.pop()})
       })
       .then(() => this.setState({stats: data}))
     })
@@ -50,7 +49,6 @@ class App extends Component {
   }
 
   render() {
-    var {stats} = this.state
     return (
       <div style={{flex: 1, marginTop: 20}} className="App">
         <h1>Commits this week</h1>
