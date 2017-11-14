@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import logo from './logo.svg';
 import './App.css';
 import fetch from 'node-fetch'
-import keys from './keys.json'
 import { BarChart, Bar, XAxis, YAxis } from 'recharts';
 
 //Auth
