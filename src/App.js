@@ -13,10 +13,20 @@ if(!USER) throw Error('Could not find GITHUB_USER in keys.json') //Goto: <arvin 
 if(!TOKEN) throw Error('Could not find GITHUB_TOKEN in keys.json') //Goto: <arvin add url here> to obtain your token
 
 const AUTH = btoa(`${USER}:${TOKEN}`)
-const HEADER = {Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Basic ${AUTH}`}
+const HEADER = {
+  Accept: 'application/json',
+  'User-Agent': 'Gimi',
+  'Content-Type': 'application/json',
+  Authorization: `Basic ${AUTH}`,
+  'Access-Control-Allow-Origin': '*',
+
+  'Access-Control-Allow-Credentials': 'true',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+  'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, text/html, application/xhtml+xml, application/xml, image/webp, image/apng, */*'
+}
 const OPTIONS = {method: "GET", headers: HEADER}
 
-const GIT_URL = 'https://api.github.com'
+const GIT_URL = 'http://localhost:3001/github' //'https://api.github.com'
 const CALL = '/stats/participation'
 const COMPANIES = [
   {name: 'Angular', url: '/repos/angular/angular.js'},
@@ -42,21 +52,21 @@ class App extends Component {
       fetch(url, OPTIONS)
       .then((res) => res.json())
       .then((res) => {
-        // Pop commit count from latest week
-        if(res.all) data.push({name: company.name, data: res.all.pop()})
+        let lastWeeksCommits = res.all[res.all.length - 2]
+        data.push({name: company.name, data: lastWeeksCommits})
       })
       .then(() => this.setState({stats: data}))
     })
   }
 
   urlBuilder(company) {
-    return GIT_URL + company + CALL
+    return GIT_URL //+ company + CALL
   }
 
   render() {
     return (
       <div style={{flex: 1, marginTop: 20}} className="App">
-        <h1>Commits this week</h1>
+        <h1>Commits last week</h1>
         <p>(Week starts Sunday)</p>
         {this.renderChart()}
       </div>

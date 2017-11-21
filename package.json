@@ -13,8 +13,19 @@
     "start": "react-scripts start",
     "build": "CI=false react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "pretest": "npm run prebuild",
-    "prebuild": "node prebuild.js"
-  }
+    "eject": "react-scripts eject"
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gimi-org/gimi-teamstats.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gimi-org/gimi-teamstats/issues"
+  },
+  "homepage": "https://github.com/gimi-org/gimi-teamstats#readme"
 }
