@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 // import logo from './logo.svg';
 import './App.css';
-import fetch from 'node-fetch'
 import { BarChart, Bar, XAxis, YAxis } from 'recharts';
 import keys from './keys.json' //Goto: <arvin add url here> to obtain your keys
 
@@ -13,17 +12,7 @@ if(!USER) throw Error('Could not find GITHUB_USER in keys.json') //Goto: <arvin 
 if(!TOKEN) throw Error('Could not find GITHUB_TOKEN in keys.json') //Goto: <arvin add url here> to obtain your token
 
 const AUTH = btoa(`${USER}:${TOKEN}`)
-const HEADER = {
-  Accept: 'application/json',
-  'User-Agent': 'Gimi',
-  'Content-Type': 'application/json',
-  Authorization: `Basic ${AUTH}`,
-  'Access-Control-Allow-Origin': '*',
-
-  'Access-Control-Allow-Credentials': 'true',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-  'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, text/html, application/xhtml+xml, application/xml, image/webp, image/apng, */*'
-}
+const HEADER = {Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Basic ${AUTH}`}
 const OPTIONS = {method: "GET", headers: HEADER}
 
 const GIT_URL = 'http://localhost:3001/github' //'https://api.github.com'
@@ -60,7 +49,7 @@ class App extends Component {
   }
 
   urlBuilder(company) {
-    return GIT_URL //+ company + CALL
+    return GIT_URL + company + CALL
   }
 
   render() {
@@ -76,14 +65,14 @@ class App extends Component {
   renderChart () {
     var {stats} = this.state
 
-    return (
+    return stats.length === COMPANIES.length ? (
       <BarChart width={1200} height={600} data={stats}>
         <XAxis dataKey="name" tick={{stroke: 'black', padding: 5, strokeWidth: 1, fontSize: 18}} />
         <YAxis />
         <Bar type="monotone" dataKey="data" barSize={30} fill="#66ccff"
           label={{ fill: 'red', fontSize: 20 }} />
       </BarChart>
-    )
+    ) : <div style={{flex: 1, marginTop: 200, fontSize: 25}}>Waiting...</div>
   }
 
   renderStat(stat, index) {
