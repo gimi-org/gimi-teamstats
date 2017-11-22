@@ -17,6 +17,7 @@ const OPTIONS = {method: "GET", headers: HEADER}
 const GIT_URL = '/github' //'https://api.github.com'
 const CALL = '/stats/participation'
 const COMPANIES = [
+  {name: 'gimi-server', url: '/repos/gimi-org/gimi-server'},
   {name: 'Angular', url: '/repos/angular/angular.js'},
   {name: 'Linux', url: '/repos/torvalds/linux'},
   {name: 'React', url: '/repos/facebook/react'},
@@ -27,13 +28,17 @@ const COMPANIES = [
   {name: 'Atom', url: '/repos/atom/atom'},
   {name: 'VS Code', url: '/repos/Microsoft/vscode'},
   {name: 'TensorFlow', url: '/repos/tensorflow/tensorflow'},
-  {name: 'Veckopengen', url: '/repos/gimi-org/gimi-app'}
+  {name: 'Veckopengen', url: '/repos/gimi-org/gimi-app'},
 ]
+
+const GIMI_SERVER = {name: 'gimi-server', url: '/repos/gimi-org/gimi-server'}
+
+let data = []
+let gatherCommits = []
 
 class App extends Component {
   state = {stats: []}
   componentWillMount () {
-    var data = []
 
     COMPANIES.forEach((company) => {
       let url = this.urlBuilder(company.url)
@@ -41,7 +46,13 @@ class App extends Component {
       .then((res) => res.json())
       .then((res) => {
         let lastWeeksCommits = res.all[res.all.length - 2]
-        data.push({name: company.name, data: lastWeeksCommits})
+        let commitCount = {name: company.name, data: lastWeeksCommits}
+        if (company.name === 'Veckopengen' || company.name === 'gimi-server'){
+          this.addCommitCount(commitCount)
+        }
+        else{
+          data.push(commitCount)
+        }
       })
       .then(() => this.setState({stats: data}))
       .catch(console.error)
@@ -50,6 +61,12 @@ class App extends Component {
 
   urlBuilder(company) {
     return GIT_URL + company + CALL
+  }
+
+  addCommitCount(commitCount) {
+    gatherCommits.push(commitCount.data)
+    let sum = gatherCommits.reduce((s, v) => s + v)
+    if(commitCount.name === 'Veckopengen') data.push({...commitCount, data: sum})
   }
 
   render() {
@@ -64,8 +81,10 @@ class App extends Component {
 
   renderChart () {
     var {stats} = this.state
+    console.log(stats)
+    console.log(COMPANIES)
 
-    return stats.length === COMPANIES.length ? (
+    return stats.length === (COMPANIES.length - 1) ? (
       <BarChart width={1200} height={600} data={stats}>
         <XAxis dataKey="name" tick={{stroke: 'black', padding: 5, strokeWidth: 1, fontSize: 18}} />
         <YAxis />
