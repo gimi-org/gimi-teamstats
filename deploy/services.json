@@ -1,0 +1,6 @@
+{
+  "gimi-teamstats": {
+    "cluster": "gimi-web",
+    "taskDefinition": "gimi-teamstats"
+  }
+}

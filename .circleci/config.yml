@@ -33,24 +33,27 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      # run tests!
+      # run tests! trigger build
       - run: yarn test
       - run: yarn run build
-
 
       - persist_to_workspace:
           root: ~/repo/
           paths:
-            - build/*
+            - ./*
 
   deploy-job:
-    machine: true
+    working_directory: ~/repo
+    docker:
+      - image: circleci/python:3.6.1
     steps:
-      - run: sudo pip install awscli
-      - attach_workspace:
-          at: ~/repo/
-      - run: aws s3 sync ~/repo/build s3://gimi-teamstats --region=eu-west-1 --acl public-read --delete
+      - setup_remote_docker
 
+      - attach_workspace:
+          at: ~/repo
+
+      - run: sudo pip install -r deploy/requirements.txt
+      - run: ecs-deployer.py deploy --keep-image -f
 workflows:
   version: 2
   build-deploy:

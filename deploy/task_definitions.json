@@ -1,0 +1,47 @@
+{
+  "gimi-teamstats": {
+  "requiresAttributes": [
+    {
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.task-iam-role"
+    }
+  ],
+  "taskDefinitionArn": "arn:aws:ecs:eu-west-1:499429123252:task-definition/gimi-teamstats:1",
+  "networkMode": "bridge",
+  "status": "ACTIVE",
+  "revision": 1,
+  "taskRoleArn": "arn:aws:iam::499429123252:role/ecsTaskRole",
+  "containerDefinitions": [
+    {
+      "volumesFrom": [],
+      "memory": 128,
+      "portMappings": [
+        {
+          "hostPort": 0,
+          "containerPort": 9000,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "mountPoints": [],
+      "name": "gimi-teamstats",
+      "environment": [],
+      "image": "gimi-teamstats",
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/gimi-web",
+          "awslogs-region": "eu-west-1",
+          "awslogs-stream-prefix": "gimi-teamstats"
+        }
+      },
+      "cpu": 0
+    }
+  ],
+  "placementConstraints": [],
+  "volumes": [],
+  "family": "gimi-teamstats"
+  }
+}

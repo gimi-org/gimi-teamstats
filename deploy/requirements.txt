@@ -1,0 +1,1 @@
+ecs-deployer==0.1.2

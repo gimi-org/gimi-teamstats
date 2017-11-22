@@ -1,0 +1,8 @@
+{
+  "gimi-teamstats": {
+    "dockerfile": "Dockerfile",
+    "tagCommand": "echo latest",
+    "repository": "499429123252.dkr.ecr.eu-west-1.amazonaws.com/gimi-teamstats",
+    "build": true
+  }
+}
