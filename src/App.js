@@ -3,7 +3,7 @@ import './App.css';
 import { BarChart, Bar, XAxis, YAxis } from 'recharts';
 import keys from './keys.json' // Keys are being fetched from local file keys.json
 
-//Auth
+// Auth
 const USER = keys.user
 const TOKEN = keys.token
 
