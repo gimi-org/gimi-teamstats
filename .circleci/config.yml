@@ -34,7 +34,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests! trigger build
-      - run: yarn run prebuild
+      - run: yarn run create-keys
       - run: yarn test
       - run: yarn run build
 
