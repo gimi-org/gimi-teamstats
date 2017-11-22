@@ -18,4 +18,4 @@ RUN npm run build:server
 EXPOSE 9000
 
 # defined in package.json
-CMD [ "npm", "run", "start:server"]
+CMD [ "node", "dest/server/index.js"]
