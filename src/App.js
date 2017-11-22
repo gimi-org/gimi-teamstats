@@ -44,6 +44,7 @@ class App extends Component {
         data.push({name: company.name, data: lastWeeksCommits})
       })
       .then(() => this.setState({stats: data}))
+      .catch(console.error)
     })
   }
 
