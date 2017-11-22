@@ -14,7 +14,7 @@ const AUTH = btoa(`${USER}:${TOKEN}`)
 const HEADER = {Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Basic ${AUTH}`}
 const OPTIONS = {method: "GET", headers: HEADER}
 
-const GIT_URL = 'http://localhost:3001/github' //'https://api.github.com'
+const GIT_URL = '/github' //'https://api.github.com'
 const CALL = '/stats/participation'
 const COMPANIES = [
   {name: 'Angular', url: '/repos/angular/angular.js'},
