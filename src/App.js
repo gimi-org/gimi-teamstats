@@ -9,7 +9,7 @@ const TOKEN = keys.token
 
 if(!USER) throw Error('Could not find GITHUB_USER in keys.json') //Goto: See README for instructions on how to obtain your token
 if(!TOKEN) throw Error('Could not find GITHUB_TOKEN in keys.json') //Goto: See README for instructions on how to obtain your token
-
+console.log(USER, TOKEN)
 const AUTH = btoa(`${USER}:${TOKEN}`)
 const HEADER = {Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Basic ${AUTH}`}
 const OPTIONS = {method: "GET", headers: HEADER}
@@ -37,6 +37,7 @@ class App extends Component {
 
     COMPANIES.forEach((company) => {
       let url = this.urlBuilder(company.url)
+      console.log(OPTIONS)
       fetch(url, OPTIONS)
       .then((res) => res.json())
       .then((res) => {
