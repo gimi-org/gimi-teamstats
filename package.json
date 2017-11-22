@@ -32,19 +32,8 @@
     "start:server": "node dest/server/index.js",
     "server": "npm run build:server && npm run start:server",
     "docker:build": "docker build -f ./deploy/Dockerfile -t gimi-project .",
-    "docker:run": "docker run -p 80:9000 --name gimi-project gimi-project"
-  },
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
-  "main": "index.js",
-  "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gimi-org/gimi-teamstats.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/gimi-org/gimi-teamstats/issues"
-  },
-  "homepage": "https://github.com/gimi-org/gimi-teamstats#readme"
+    "docker:run": "docker run -p 9000:9000 --name gimi-project gimi-project",
+    "docker:rm-all": "docker rm $(docker ps -a -q)",
+    "docker:rmi-all": "docker rmi $(docker images -q)"
+  }
 }
