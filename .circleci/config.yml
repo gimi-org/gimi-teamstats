@@ -54,7 +54,7 @@ jobs:
           at: ~/repo
 
       - run: sudo pip install -r deploy/requirements.txt
-      - run: cp deployer/Dockerfile Dockerfile #ecs deploy needs to have dockerfile in path
+      - run: cp deploy/Dockerfile Dockerfile #ecs deploy needs to have dockerfile in path
       - run: ecs-deployer.py deploy --keep-image -f
 workflows:
   version: 2
