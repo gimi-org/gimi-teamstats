@@ -18,7 +18,9 @@
     "react-scripts": "1.0.14",
     "recharts": "^1.0.0-beta.1",
     "request": "^2.83.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "mkdirp": "0.5.1",
+    "touch": "3.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

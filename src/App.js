@@ -55,7 +55,7 @@ class App extends Component {
   render() {
     return (
       <div style={{flex: 1, marginTop: 20}} className="App">
-        <h1>Commits last week</h1>
+        <h1 className='header'>Commits last week</h1>
         <p>(Week starts Sunday)</p>
         {this.renderChart()}
       </div>
@@ -70,7 +70,7 @@ class App extends Component {
         <XAxis dataKey="name" tick={{stroke: 'black', padding: 5, strokeWidth: 1, fontSize: 18}} />
         <YAxis />
         <Bar type="monotone" dataKey="data" barSize={30} fill="#66ccff"
-          label={{ fill: 'red', fontSize: 20 }} />
+          label={{ fill: 'white', fontSize: 20 }} />
       </BarChart>
     ) : <div style={{flex: 1, marginTop: 200, fontSize: 25}}>Waiting...</div>
   }
