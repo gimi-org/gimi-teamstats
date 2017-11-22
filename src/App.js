@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
-// import logo from './logo.svg';
 import './App.css';
 import { BarChart, Bar, XAxis, YAxis } from 'recharts';
-import keys from './keys.json' //Goto: <arvin add url here> to obtain your keys
+import keys from './keys.json' // Keys are being fetched from local file keys.json
 
 //Auth
 const USER = keys.user
 const TOKEN = keys.token
 
-if(!USER) throw Error('Could not find GITHUB_USER in keys.json') //Goto: <arvin add url here> to obtain your user
-if(!TOKEN) throw Error('Could not find GITHUB_TOKEN in keys.json') //Goto: <arvin add url here> to obtain your token
+if(!USER) throw Error('Could not find GITHUB_USER in keys.json') //Goto: See README for instructions on how to obtain your token
+if(!TOKEN) throw Error('Could not find GITHUB_TOKEN in keys.json') //Goto: See README for instructions on how to obtain your token
 
 const AUTH = btoa(`${USER}:${TOKEN}`)
 const HEADER = {Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Basic ${AUTH}`}
