@@ -81,8 +81,6 @@ class App extends Component {
 
   renderChart () {
     var {stats} = this.state
-    console.log(stats)
-    console.log(COMPANIES)
 
     return stats.length === (COMPANIES.length - 1) ? (
       <BarChart width={1200} height={600} data={stats}>
