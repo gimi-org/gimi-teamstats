@@ -14,7 +14,7 @@ const AUTH = btoa(`${USER}:${TOKEN}`)
 const HEADER = {Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Basic ${AUTH}`}
 const OPTIONS = {method: "GET", headers: HEADER}
 
-const GIT_URL = '/github' //'https://api.github.com'
+const GIT_URL = 'https://api.github.com'//'/github' //
 const CALL = '/stats/participation'
 const COMPANIES = [
   {name: 'gimi-server', url: '/repos/gimi-org/gimi-server'},
@@ -23,12 +23,11 @@ const COMPANIES = [
   {name: 'React', url: '/repos/facebook/react'},
   {name: 'React Native', url: '/repos/facebook/react-native'},
   {name: 'VLC', url: '/repos/videolan/vlc'},
-  {name: 'Bootstrap', url: '/repos/twbs/bootstrap'},
   {name: 'NodeJS', url: '/repos/nodejs/node'},
-  {name: 'Atom', url: '/repos/atom/atom'},
-  {name: 'VS Code', url: '/repos/Microsoft/vscode'},
+  {name: 'Bitcoin', url: '/repos/bitcoin/bitcoin'},
   {name: 'TensorFlow', url: '/repos/tensorflow/tensorflow'},
-  {name: 'Veckopengen', url: '/repos/gimi-org/gimi-app'},
+  {name: 'ENTER REPO', url: '/repos/gimi-org/gimi-app'},
+  {name: 'Gimi Tech', url: '/repos/gimi-org/gimi-app'},
 ]
 
 const GIMI_SERVER = {name: 'gimi-server', url: '/repos/gimi-org/gimi-server'}
@@ -48,14 +47,14 @@ class App extends Component {
         let lastWeeksCommits = res.all[res.all.length - 2]
         let commitCount = {name: company.name, data: lastWeeksCommits}
         if (company.name === 'Veckopengen' || company.name === 'gimi-server'){
-          this.addCommitCount(commitCount)
+          this.combineCount(commitCount)
         }
         else{
           data.push(commitCount)
         }
       })
       .then(() => this.setState({stats: data}))
-      .catch(console.error)
+      .catch(e => console.error(e))
     })
   }
 
@@ -63,7 +62,7 @@ class App extends Component {
     return GIT_URL + company + CALL
   }
 
-  addCommitCount(commitCount) {
+  combineCount(commitCount) {
     gatherCommits.push(commitCount.data)
     let sum = gatherCommits.reduce((s, v) => s + v)
     if(commitCount.name === 'Veckopengen') data.push({...commitCount, data: sum})
@@ -89,7 +88,7 @@ class App extends Component {
         <Bar type="monotone" dataKey="data" barSize={30} fill="#66ccff"
           label={{ fill: 'white', fontSize: 20 }} />
       </BarChart>
-    ) : <div style={{flex: 1, marginTop: 200, fontSize: 25}}>Waiting...</div>
+    ) : <div style={{flex: 1, marginTop: 200, fontSize: 25}}>Loading...</div>
   }
 
   renderStat(stat, index) {
