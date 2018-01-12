@@ -26,11 +26,11 @@ const COMPANIES = [
   {name: 'NodeJS', url: '/repos/nodejs/node'},
   {name: 'Bitcoin', url: '/repos/bitcoin/bitcoin'},
   {name: 'TensorFlow', url: '/repos/tensorflow/tensorflow'},
-  {name: 'ENTER REPO', url: '/repos/gimi-org/gimi-app'},
+  {name: 'YOUR REPO', url: '/repos/gimi-org/gimi-app'},
   {name: 'Gimi Tech', url: '/repos/gimi-org/gimi-app'},
 ]
 
-const GIMI_SERVER = {name: 'gimi-server', url: '/repos/gimi-org/gimi-server'}
+const PAIRED_REPOS = ['gimi-server', 'Gimi Tech']
 
 let data = []
 let gatherCommits = []
@@ -39,14 +39,14 @@ class App extends Component {
   state = {stats: []}
   componentWillMount () {
 
-    COMPANIES.forEach((company) => {
-      let url = this.urlBuilder(company.url)
+    COMPANIES.forEach((org) => {
+      let url = this.urlBuilder(org.url)
       fetch(url, OPTIONS)
       .then((res) => res.json())
       .then((res) => {
         let lastWeeksCommits = res.all[res.all.length - 2]
-        let commitCount = {name: company.name, data: lastWeeksCommits}
-        if (company.name === 'Veckopengen' || company.name === 'gimi-server'){
+        let commitCount = {name: org.name, data: lastWeeksCommits}
+        if (PAIRED_REPOS.includes(org.name)){
           this.combineCount(commitCount)
         }
         else{
@@ -58,14 +58,15 @@ class App extends Component {
     })
   }
 
-  urlBuilder(company) {
-    return GIT_URL + company + CALL
+  urlBuilder(org) {
+    return GIT_URL + org + CALL
   }
 
   combineCount(commitCount) {
     gatherCommits.push(commitCount.data)
     let sum = gatherCommits.reduce((s, v) => s + v)
-    if(commitCount.name === 'Veckopengen') data.push({...commitCount, data: sum})
+    console.log(commitCount)
+    if(commitCount.name === 'Gimi Tech') data.push({...commitCount, data: sum})
   }
 
   render() {
@@ -80,8 +81,10 @@ class App extends Component {
 
   renderChart () {
     var {stats} = this.state
+    console.log(stats.length)
+    console.log(COMPANIES.length)
 
-    return stats.length === (COMPANIES.length - 1) ? (
+    return stats.length === (COMPANIES.length - PAIRED_REPOS.length / 2) ? (
       <BarChart width={1200} height={600} data={stats}>
         <XAxis dataKey="name" tick={{stroke: 'black', padding: 5, strokeWidth: 1, fontSize: 18}} />
         <YAxis />
