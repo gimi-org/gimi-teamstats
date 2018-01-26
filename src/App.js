@@ -19,7 +19,7 @@ const AUTH = btoa(`${USER}:${TOKEN}`)
 const HEADER = {Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Basic ${AUTH}`}
 const OPTIONS = {method: "GET", headers: HEADER}
 
-const GIT_URL = 'https://api.github.com' //'' /github
+const GIT_URL = '/github' //'https://api.github.com'
 const CALL = '/stats/participation'
 const COMPANIES = [
   {name: 'gimi-server', url: '/repos/gimi-org/gimi-server'},
