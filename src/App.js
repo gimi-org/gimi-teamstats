@@ -1,3 +1,8 @@
+/*
+TODO line chart comparing gimi commits to own historical values
+Do this with all companies in array.
+*/
+
 import React, { Component } from 'react'
 import './App.css';
 import { BarChart, Bar, XAxis, YAxis } from 'recharts';
@@ -14,7 +19,7 @@ const AUTH = btoa(`${USER}:${TOKEN}`)
 const HEADER = {Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Basic ${AUTH}`}
 const OPTIONS = {method: "GET", headers: HEADER}
 
-const GIT_URL = '/github' //'https://api.github.com'
+const GIT_URL = 'https://api.github.com' //'' /github
 const CALL = '/stats/participation'
 const COMPANIES = [
   {name: 'gimi-server', url: '/repos/gimi-org/gimi-server'},
@@ -26,7 +31,6 @@ const COMPANIES = [
   {name: 'NodeJS', url: '/repos/nodejs/node'},
   {name: 'Bitcoin', url: '/repos/bitcoin/bitcoin'},
   {name: 'TensorFlow', url: '/repos/tensorflow/tensorflow'},
-  {name: 'YOUR REPO', url: '/repos/gimi-org/gimi-app'},
   {name: 'Gimi Tech', url: '/repos/gimi-org/gimi-app'},
 ]
 
@@ -46,6 +50,7 @@ class App extends Component {
       .then((res) => {
         let lastWeeksCommits = res.all[res.all.length - 2]
         let commitCount = {name: org.name, data: lastWeeksCommits}
+        console.log(commitCount)
         if (PAIRED_REPOS.includes(org.name)){
           this.combineCount(commitCount)
         }
