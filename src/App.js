@@ -5,7 +5,7 @@ Do this with all companies in array.
 
 import React, { Component } from 'react'
 import './App.css';
-import { BarChart, Bar, XAxis, YAxis } from 'recharts';
+import { ScatterChart, Scatter, BarChart, Bar, XAxis, YAxis, ZAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import keys from './keys.json' // Keys are being fetched from local file keys.json
 
 // Auth
@@ -19,7 +19,7 @@ const AUTH = btoa(`${USER}:${TOKEN}`)
 const HEADER = {Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Basic ${AUTH}`}
 const OPTIONS = {method: "GET", headers: HEADER}
 
-const GIT_URL = '/github' //'https://api.github.com'
+const GIT_URL =  'https://api.github.com' // '/github'
 const CALL = '/stats/participation'
 const COMPANIES = [
   {name: 'gimi-server', url: '/repos/gimi-org/gimi-server'},
@@ -38,29 +38,53 @@ const PAIRED_REPOS = ['gimi-server', 'Gimi Tech']
 
 let data = []
 let gatherCommits = []
+let gimiHistory = []
 
 class App extends Component {
-  state = {stats: []}
+  state = {stats: [], gimiHistory: []}
   componentWillMount () {
 
     COMPANIES.forEach((org) => {
       let url = this.urlBuilder(org.url)
       fetch(url, OPTIONS)
-      .then((res) => res.json())
-      .then((res) => {
-        let lastWeeksCommits = res.all[res.all.length - 2]
-        let commitCount = {name: org.name, data: lastWeeksCommits}
-        console.log(commitCount)
-        if (PAIRED_REPOS.includes(org.name)){
-          this.combineCount(commitCount)
-        }
-        else{
-          data.push(commitCount)
-        }
-      })
-      .then(() => this.setState({stats: data}))
-      .catch(e => console.error(e))
+        .then((res) => res.json())
+        .then((res) => {
+          let lastWeeksCommits = res.all[res.all.length - 2]
+          let commitCount = {name: org.name, data: lastWeeksCommits}
+          if (PAIRED_REPOS.includes(org.name)){
+            this.combineCount(commitCount)
+          }
+          else{
+            data.push(commitCount)
+          }
+        })
+        .then(() => this.setState({stats: data}))
+        .catch(e => console.error(e))
     })
+
+    // get gimi history
+
+    let gimi_url = this.urlBuilder('/repos/gimi-org/gimi-app')
+    let gimi_server_url = this.urlBuilder('/repos/gimi-org/gimi-server')
+    fetch(gimi_url, OPTIONS)
+      .then((res) => res.json())
+      .then(res => res.all)
+      .then(gimiApp => {
+        return fetch(gimi_server_url, OPTIONS)
+          .then((res) => res.json())
+          // .then(res => console.log('server', res.all))
+          .then(res => {
+            let gimiServerCounts = res.all
+            for (let i = 0; i < gimiApp.length; i++) {
+              gimiHistory.push({count: gimiApp[i] + gimiServerCounts[i], week: i + 1})
+            }
+          })
+          .then(() => this.setState({gimiHistory}))
+      })
+
+
+
+
   }
 
   urlBuilder(org) {
@@ -70,7 +94,6 @@ class App extends Component {
   combineCount(commitCount) {
     gatherCommits.push(commitCount.data)
     let sum = gatherCommits.reduce((s, v) => s + v)
-    console.log(commitCount)
     if(commitCount.name === 'Gimi Tech') data.push({...commitCount, data: sum})
   }
 
@@ -80,14 +103,13 @@ class App extends Component {
         <h1 className='header'>Commits last week</h1>
         <p>(Week starts Sunday)</p>
         {this.renderChart()}
+        {this.renderGimiChart()}
       </div>
     )
   }
 
   renderChart () {
     var {stats} = this.state
-    console.log(stats.length)
-    console.log(COMPANIES.length)
 
     return stats.length === (COMPANIES.length - PAIRED_REPOS.length / 2) ? (
       <BarChart width={1200} height={600} data={stats}>
@@ -97,6 +119,21 @@ class App extends Component {
           label={{ fill: 'white', fontSize: 20 }} />
       </BarChart>
     ) : <div style={{flex: 1, marginTop: 200, fontSize: 25}}>Loading...</div>
+  }
+
+  renderGimiChart () {
+    var {gimiHistory} = this.state
+    return gimiHistory.length === 52 ? (
+      <div style={{width: 1200, height: 620, backgroundColor: 'white'}}>
+        <h3 style={{fontSize: 22}}>Gimi Commit History</h3>
+      	<ScatterChart width={1200} height={600} margin={{top: 20, right: 20, bottom: 20, left: 20}}>
+        	<XAxis tickCount={10} type="number" dataKey={'week'} name='week' label='week' />
+        	<YAxis tickCount={10} type="number" dataKey={'count'} name='commits' label='commits'/>
+          <CartesianGrid />
+        	<Tooltip cursor={{strokeDasharray: '3 3'}}/>
+        	<Scatter name='Gimi' data={gimiHistory} fill='#007fff' line shape="circle"/>
+        </ScatterChart>
+      </div>) : <div style={{flex: 1, marginTop: 200, fontSize: 25}}>Loading...</div>
   }
 
   renderStat(stat, index) {
