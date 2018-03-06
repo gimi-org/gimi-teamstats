@@ -100,8 +100,6 @@ class App extends Component {
   render() {
     return (
       <div style={{flex: 1, marginTop: 20}} className="App">
-        <h1 className='header'>Commits last week</h1>
-        <p>(Week starts Sunday)</p>
         {this.renderChart()}
         {this.renderGimiChart()}
       </div>
@@ -112,20 +110,24 @@ class App extends Component {
     var {stats} = this.state
 
     return stats.length === (COMPANIES.length - PAIRED_REPOS.length / 2) ? (
-      <BarChart width={1200} height={600} data={stats}>
-        <XAxis dataKey="name" tick={{stroke: 'black', padding: 5, strokeWidth: 1, fontSize: 18}} />
-        <YAxis />
-        <Bar type="monotone" dataKey="data" barSize={30} fill="#66ccff"
-          label={{ fill: 'white', fontSize: 20 }} />
-      </BarChart>
-    ) : <div style={{flex: 1, marginTop: 200, fontSize: 25}}>Loading...</div>
+      <div style={{width: 1200, height: 700}}>
+        <h3 style={{fontSize: 30}}>Commits last week</h3>
+        <p>(Week starts sunday)</p>
+          <BarChart width={1200} height={600} data={stats}>
+            <XAxis dataKey="name" tick={{stroke: 'black', padding: 5, strokeWidth: 1, fontSize: 18}} />
+            <YAxis />
+            <Bar type="monotone" dataKey="data" barSize={30} fill="#007fff"
+              label={{ fill: 'white', fontSize: 20 }} />
+          </BarChart>
+      </div>
+    ) : <div style={{flex: 1, marginTop: 200, fontSize: 25, height: 700}}>Loading...</div>
   }
 
   renderGimiChart () {
     var {gimiHistory} = this.state
     return gimiHistory.length === 52 ? (
-      <div style={{width: 1200, height: 620, backgroundColor: 'white'}}>
-        <h3 style={{fontSize: 22}}>Gimi Commit History</h3>
+      <div style={{width: 1200, height: 620}}>
+        <h3 style={{fontSize: 30}}>Gimi Commit History</h3>
       	<ScatterChart width={1200} height={600} margin={{top: 20, right: 20, bottom: 20, left: 20}}>
         	<XAxis tickCount={10} type="number" dataKey={'week'} name='week' label='week' />
         	<YAxis tickCount={10} type="number" dataKey={'count'} name='commits' label='commits'/>
@@ -133,7 +135,7 @@ class App extends Component {
         	<Tooltip cursor={{strokeDasharray: '3 3'}}/>
         	<Scatter name='Gimi' data={gimiHistory} fill='#007fff' line shape="circle"/>
         </ScatterChart>
-      </div>) : <div style={{flex: 1, marginTop: 200, fontSize: 25}}>Loading...</div>
+      </div>) : <div style={{flex: 1, marginTop: 200, fontSize: 25, height: 620}}>Loading...</div>
   }
 
   renderStat(stat, index) {
