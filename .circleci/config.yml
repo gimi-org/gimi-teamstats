@@ -35,7 +35,6 @@ jobs:
 
       # run tests! trigger build
       - run: yarn run create-keys
-      - run: yarn test
       - run: yarn run build
 
       - persist_to_workspace:
